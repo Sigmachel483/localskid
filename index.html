@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Localskid</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0b0b0b;
+      font-family: "Segoe UI", sans-serif;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 40px;
+    }
+
+    .sidebar {
+      width: 200px;
+      text-align: center;
+      margin-right: 50px;
+    }
+
+    .sidebar img {
+      width: 100px;
+      height: auto;
+      margin-bottom: 15px;
+      filter: brightness(0.9);
+    }
+
+    .sidebar .game-name {
+      color: #aaa;
+      font-size: 16px;
+    }
+
+    .main {
+      max-width: 700px;
+      text-align: center;
+    }
+
+    .main h1 {
+      font-size: 48px;
+      color: #00ffff;
+      text-shadow: 0 0 15px #00ffff;
+      margin-bottom: 30px;
+    }
+
+    .main .telegram {
+      font-size: 18px;
+      margin-bottom: 25px;
+    }
+
+    .main .telegram a {
+      color: #00aaff;
+      text-decoration: none;
+    }
+
+    .main .info {
+      color: red;
+      font-size: 26px;
+      font-weight: bold;
+      text-shadow: 0 0 10px red;
+      margin-bottom: 15px;
+    }
+
+    .main .status {
+      color: lime;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="snow"></canvas>
+
+  <div class="container">
+    <div class="sidebar">
+      <img src="standoff.png" alt="ДА ФТО ТЫ ЭТА ЖИ ЧИТ НА СРАНДОФФ">
+      <div class="game-name">срандоффсик ситы</div>
+    </div>
+
+    <div class="main">
+      <h1>Localskid</h1>
+      <div class="telegram">
+        Наш Telegram-канал: <a href="https://t.me/Localskid" target="_blank">t.me/Localskid</a>
+      </div>
+      <div class="info">DLL на Standoff 0.34.1</div>
+      <div class="status">Статус: ✅ Работает</div>
+    </div>
+  </div>
+
+  <script>
+    // Снежинки
+    const canvas = document.getElementById('snow');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    let snowflakes = [];
+
+    function createSnowflake() {
+      const x = Math.random() * width;
+      const y = -10;
+      const radius = Math.random() * 3 + 1.5;
+      const speed = Math.random() * 1.5 + 0.5;
+      snowflakes.push({ x, y, radius, speed });
+    }
+
+    function drawSnowflakes() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      for (const flake of snowflakes) {
+        ctx.moveTo(flake.x, flake.y);
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+      }
+      ctx.fill();
+      moveSnowflakes();
+    }
+
+    function moveSnowflakes() {
+      for (const flake of snowflakes) {
+        flake.y += flake.speed;
+        if (flake.y > height) {
+          flake.y = -10;
+          flake.x = Math.random() * width;
+        }
+      }
+    }
+
+    function update() {
+      drawSnowflakes();
+      requestAnimationFrame(update);
+    }
+
+    setInterval(createSnowflake, 100);
+    update();
+  </script>
+</body>
+</html>
